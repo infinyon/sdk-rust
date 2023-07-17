@@ -3,6 +3,8 @@ use crate::event::{AttributesReader, AttributesV10, AttributesWriter, SpecVersio
 use crate::message::{BinarySerializer, MessageAttributeValue};
 use chrono::{DateTime, Utc};
 use url::Url;
+
+#[cfg(not(target_arch = "wasm32"))]
 use uuid::Uuid;
 
 pub(crate) const ATTRIBUTE_NAMES: [&str; 8] = [
@@ -154,7 +156,12 @@ impl AttributesWriter for Attributes {
 impl Default for Attributes {
     fn default() -> Self {
         Attributes {
+            #[cfg(not(target_arch = "wasm32"))]
             id: Uuid::new_v4().to_string(),
+
+            #[cfg(target_arch = "wasm32")]
+            id: "00000000-0000-0000-0000-000000000000".to_string(),
+            
             ty: "type".to_string(),
             source: default_hostname().to_string(),
             datacontenttype: None,
