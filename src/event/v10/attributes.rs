@@ -168,6 +168,10 @@ impl Default for Attributes {
             datacontenttype: None,
             dataschema: None,
             subject: None,
+
+            #[cfg(target_arch = "wasm32")]
+            time: None,
+            #[cfg(not(target_arch = "wasm32"))]
             time: Some(Utc::now()),
         }
     }
