@@ -5,7 +5,6 @@ use chrono::{DateTime, Utc};
 use core::fmt::Debug;
 use url::Url;
 
-
 #[cfg(not(target_arch = "wasm32"))]
 use uuid::Uuid;
 
@@ -163,7 +162,7 @@ impl Default for Attributes {
 
             #[cfg(target_arch = "wasm32")]
             id: "00000000-0000-0000-0000-000000000000".to_string(),
-            
+
             ty: "type".to_string(),
             source: default_hostname().to_string(),
             datacontenttype: None,

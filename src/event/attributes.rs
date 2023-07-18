@@ -269,16 +269,27 @@ pub(crate) fn default_hostname() -> Url {
 
 #[cfg(all(target_arch = "wasm32", target_os = "unknown"))]
 pub(crate) fn default_hostname() -> Url {
-    use std::str::FromStr;
 
-    Url::from_str(
-        web_sys::window()
-            .map(|w| w.location().host().ok())
-            .flatten()
-            .unwrap_or(String::from("http://localhost"))
-            .as_str(),
-    )
-    .unwrap()
+    #[cfg(feature = "web")]
+    {
+        use std::str::FromStr;
+
+        Url::from_str(
+            web_sys::window()
+                .map(|w| w.location().host().ok())
+                .flatten()
+                .unwrap_or(String::from("http://localhost"))
+                .as_str(),
+        )
+        .unwrap()
+    }
+
+    #[cfg(not(feature = "web"))]
+    {
+        use std::str::FromStr;
+        Url::from_str("http://localhost").unwrap()
+    }
+    
 }
 
 #[cfg(all(target_arch = "wasm32", target_os = "wasi"))]
